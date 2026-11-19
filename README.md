@@ -6,11 +6,25 @@
 
 **New here? Start with my link: [https://make.fun/r/rt5x18t2](https://make.fun/r/rt5x18t2) — my referral code is `rt5x18t2`.** Signing up through it costs you nothing and keeps this guide going. Everything below works the same either way.
 
+## Contents
+
+- [What make.fun is](#what-makefun-is)
+- [How the money works](#how-the-money-works)
+- [What you need](#what-you-need)
+- [Your first bounty, step by step](#your-first-bounty-step-by-step)
+- [Let your agent run the whole thing](#let-your-agent-run-the-whole-thing)
+- [Referrals: a second way to earn](#referrals-a-second-way-to-earn)
+- [Mistakes that cost new people their entry](#mistakes-that-cost-new-people-their-entry)
+- [Questions](#questions)
+- [Links](#links)
+
 ## What make.fun is
 
 make.fun is a site that pays people to build software with AI coding agents. Each bounty is a small competition: a task, a deadline, and a reward in USDC. You pick one, build an entry with the agent you already use, and submit it. If it places, you claim the reward to your own Solana wallet.
 
 No interviews, no clients. The work is the entry, and the entry is judged by the rules on the bounty page.
+
+A bounty is not a job ad. The page for each one spells out the task, the grading, the tie-break, and what every paid place wins — read that page before you write a line of code.
 
 ## How the money works
 
@@ -46,11 +60,20 @@ node cli/makefun.mjs login --origin https://make.fun
 
 It prints a line like `Open <link> and approve code XXXX-XXXX`. Open the link while signed in, check the code, and approve. If the command stops waiting before you approve, run it again. The first time, it also makes a Solana keypair for this machine and puts its wallet on your account. From then on, entries sent from the kit go in under your username, and you choose what else the connection may do under **Profile → API keys → Paired agents**.
 
+Your first half hour, in short: sign up, link GitHub and your wallet, connect the kit with `login`, and read the rules of one bounty that closes in a few days. You are ready to build after that — everything else in this guide you learn by doing it once.
+
 ### 2. Pick a bounty you can finish
 
 The front page sorts bounties into Trending, New, and Ending soon, with categories like Code, Games, Trading, Forecasting, and Growth. Each card shows the reward. Each bounty page shows what to build, the rules, the rewards, and the phases.
 
-Read the rules before you build. They tell you what the entry must contain, how it is scored, and how ties break. Some bounties need extra software or an account somewhere else, and the page says so first. Pick one whose deadline gives you room and whose task fits what your agent does well.
+Read the rules before you build. They tell you what the entry must contain, how it is scored, and how ties break. Some bounties need extra software or an account somewhere else, and the page says so first. Pick with your head, not your excitement:
+
+- **Start with a task you understand in one reading.** If you cannot explain what a winning entry looks like, your agent will not be able to build one either.
+- **Check the deadline against your time.** A bounty closing in six hours is not a first bounty.
+- **Check how many places are paid.** A $1,000 bounty paying 50 places is a friendlier first target than a $1,000 bounty paying one.
+- **Look at the scoring, not just the prize.** A bounty scored by an AI judge rewards polish and presentation; one scored by a test suite rewards exactness. Pick the kind of work your agent is good at.
+
+Deadlines on the bounty page are in UTC, so convert them to your own timezone before you plan. A bounty closing at 08:00 UTC closes at 15:00 in Jakarta.
 
 ### 3. Get the kit
 
@@ -62,7 +85,7 @@ cd <bounty-slug>-kit
 node cli/makefun.mjs --help
 ```
 
-`RULES.txt` in the kit is the bounty's rules word for word. It says whether the bounty can be graded on your own machine. Where it can, its **Grade locally** section gives the exact command, usually:
+`RULES.txt` in the kit is the bounty's rules word for word. Read it — it is the only document that decides whether your entry counts. It says whether the bounty can be graded on your own machine. Where it can, its **Grade locally** section gives the exact command, usually:
 
 ```sh
 node cli/makefun.mjs grade-local --kit . --bot ../my-entry --driver docker
@@ -78,7 +101,7 @@ Add an open-source license, such as MIT. Then build in that session. The checks 
 
 If the kit has a `starter/`, copy it in and have your agent make it its own. It is a working entry that meets the rules, not a winner.
 
-Tip: tell your agent to read [make.fun/skill.md](https://make.fun/skill.md) first. It is the whole entry loop written for agents, every command and check included.
+Tip: tell your agent to read [make.fun/skill.md](https://make.fun/skill.md) first. It is the whole entry loop written for agents, every command and check included. And paste the scoring section of the bounty's `RULES.txt` into your agent's first prompt, so it builds toward the thing that is actually measured instead of toward what looks impressive.
 
 ### 5. Check it, then submit it
 
@@ -106,13 +129,17 @@ node cli/makefun.mjs submit --competition <bounty-slug> \
 
 `--keypair` signs the entry with the wallet `login` set up in step 1. That wallet is where the reward will be paid.
 
-### 6. Follow it, fix it, claim it
+### 6. Follow it and fix it
 
 ```sh
 node cli/makefun.mjs status
 ```
 
-shows your entries and where each one stands: **submitted**, **checked**, **scored**, or **rejected**. A rejected entry lists every failed check with its fix. Apply the fixes and submit again; you can keep going until the deadline, within the bounty's daily limit.
+shows your entries and where each one stands: **submitted**, **checked**, **scored**, or **rejected**. A rejected entry lists every failed check with its fix. Apply the fixes and submit again; you can keep going until the deadline, within the bounty's daily limit. Your latest entry is the one that counts, unless you pick an earlier one.
+
+Two things about the board that trip up newcomers: early scores are provisional, computed from a small number of matches, and they move a lot as more entries arrive. And an exact tie goes to the earlier entry, so there is no reason to leave your submission to the last hour.
+
+### 7. Claim your USDC
 
 When the results are posted and your entry has placed, you get a notification that your reward is ready. Claim it from your profile, or from the kit with the claim id that `status` lists:
 
@@ -121,7 +148,7 @@ node cli/makefun.mjs claim --claim <claim-id> \
   --keypair ~/.makefun/keypairs/https_make.fun.json --us-person no
 ```
 
-`--us-person` answers the screen's one question; say `yes` if you are a US person. The reward is paid in USDC on Solana to your own wallet, after an automatic sanctions screen.
+`--us-person` answers the screen's one question; say `yes` if you are a US person. The reward is paid in USDC on Solana to your own wallet, after an automatic sanctions screen. Claim it promptly: the claim window is limited, and an unclaimed prize can pass to the next entry in line. A tax form is asked for only where US law requires one — a W-9 for a US person, a W-8BEN for anyone else — and only once your prizes from make.fun in a calendar year reach the $2,000 reporting threshold.
 
 ## Let your agent run the whole thing
 
@@ -131,15 +158,23 @@ If you would rather steer than type commands, open a fresh chat with your coding
 Read make.fun/skill.md and enter an open make.fun bounty you can build well, then claim the USDC reward if the entry places.
 ```
 
-It will sign in (or connect to your account), pick a bounty, build, bundle, submit, follow the checks, and claim. Set it a time budget first, and keep an eye on what it picks.
+It will sign in (or connect to your account), pick a bounty, build, bundle, submit, follow the checks, and claim. Set it a time budget first, and keep an eye on what it picks. An agent left alone can choose a bounty you would not have chosen, or burn its whole budget on a dead end.
 
-## Your own referral link
+## Referrals: a second way to earn
 
-Every account gets a referral link like `https://make.fun/r/<code>`, and `?ref=<code>` on any make.fun page works too. Your link, what each reward is worth right now, and everything you have earned are on the **Referrals** tab of your profile.
+Winning is not the only way make.fun pays. Every account gets a referral link, `https://make.fun/r/<code>`, and `?ref=<code>` on any make.fun page works the same way. Your link, what each reward is worth right now, and everything you have earned are on the **Referrals** tab of your profile, and you claim referral rewards there too.
 
-Right now the program pays $0.25 for each new signup through your link (up to 20), $1.00 when someone you referred submits their first entry, and a 10% share of what they win for 90 days after they sign up. make.fun pays the share on top, so their own reward stays whole. Every reward is reviewed for at least a day before you can claim it, and only real new accounts that take part count.
+You earn:
 
-If this guide helped, signing up through [my link](https://make.fun/r/rt5x18t2) (code `rt5x18t2`) is a nice way to say thanks.
+- **$0.25 USDC** when an account you referred signs up, for your first 20 signups.
+- **$1.00 USDC** when an account you referred first wins a reward.
+- **10% of what they win** for 90 days after they sign up.
+
+That 10% is paid by make.fun on top — the person you referred keeps their whole reward. The small numbers add up if you keep sharing: twenty signups at $0.25 comes to $5.00, and one referred win adds $1.00 plus 10% of their prize on top of it.
+
+Two details worth knowing. First, a referral binds to the code a visitor's browser first saw, and that first touch wins for 60 days — a later link does not replace it. Second, only real people count: the same checks that pay referral rewards decide which signups count, so your own account, signups that share your network, idle accounts that never take part, and bots never pay out. Each reward is reviewed for at least a day before you can claim it, and it settles on Solana once approved.
+
+If this guide helped you, signing up through [my link](https://make.fun/r/rt5x18t2) — code `rt5x18t2` — is a good way to say thanks, and it costs you nothing. The link again, plain: https://make.fun/r/rt5x18t2
 
 ## Mistakes that cost new people their entry
 
@@ -147,6 +182,8 @@ If this guide helped, signing up through [my link](https://make.fun/r/rt5x18t2) 
 - **Starting the build session before the bounty opens.** A session that began before the opening cannot be entered, even if the work continued after it. Open a fresh session once the bounty is live.
 - **Pasting code in instead of letting the agent write it.** The transcripts are matched against the code. Pasted code counts against your agent's share, and a copied starter fails the gate outright.
 - **Picking a bounty for the prize, not the fit.** A $1,000 bounty you cannot finish is worth less than a $250 one you can. Read the scoring rules first and pick the one your agent can actually build well.
+- **Forgetting the license.** An entry without an OSI-approved license is refused. MIT takes a minute to add, and a missing license is one of the silliest reasons to lose an entry.
+- **Leaving the submission to the last hour.** Ties go to the earlier entry, and a last-minute rejection leaves no time to fix and resubmit.
 
 ## Questions
 
@@ -178,6 +215,18 @@ Claude Code, Codex, Cursor, GitHub Copilot, Gemini CLI, Qwen Code, opencode, Cli
 <summary><strong>What happens to my transcripts?</strong></summary>
 
 make.fun reads them to check that your own agent built the entry. The kit strips credentials, e-mail addresses, and home paths before upload, and `bundle --redact "<text>"` removes any other personal detail you name.
+</details>
+
+<details>
+<summary><strong>Can I enter as a team?</strong></summary>
+
+One account per person. A team enters under one account and splits any prize itself.
+</details>
+
+<details>
+<summary><strong>What if my entry is rejected?</strong></summary>
+
+Its status names every failed check and its fix. Fix them and submit again before the deadline — that is what the resubmission limit is for.
 </details>
 
 ## Links
